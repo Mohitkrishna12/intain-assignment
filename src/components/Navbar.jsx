@@ -13,14 +13,13 @@ const StyledNavbar = styled.div`
   justify-content: space-between;
   align-items: center;
   background-color: #fff;
-  padding-left: 1rem; /* 16px */
-  padding-right: 1rem; /* 16px */
-  padding-top: 0.25rem; /* 8px */
-  padding-bottom: 0.25rem; /* 8px */
-  border-bottom: 1px solid #e6ebf4; /* You can adjust this value as needed */
+  padding-left: 1rem; 
+  padding-right: 1rem; 
+  padding-top: 0.25rem; 
+  padding-bottom: 0.25rem; 
+  border-bottom: 1px solid #e6ebf4;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 
-  /* Media query for small screens (sm breakpoint) */
   @media screen and (max-width: 768px) {
     padding-left: 2rem; /* 32px */
     padding-right: 2rem; /* 32px */
@@ -40,11 +39,10 @@ const NavItems = styled.div`
 const NavItem = styled(Link)`
   display: flex;
   align-items: center;
-  text-decoration: none; /* Remove the default underline on Link */
+  text-decoration: none; 
   &:first-child {
     margin-left: 0;
   }
-  /* Rest of the styles */
   margin-left: 30px;
   cursor: pointer;
   color: #5f6366;
@@ -59,7 +57,6 @@ const NavItem = styled(Link)`
 
 const HamburgerMenu = styled.div`
   display: none;
-
   @media screen and (max-width: 768px) {
     display: block;
     cursor: pointer;
