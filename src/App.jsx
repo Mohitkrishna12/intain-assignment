@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import { Navbar } from "./components/Navbar";
@@ -16,6 +16,7 @@ const MainContainer = styled.main`
 `;
 
 const App = () => {
+  console.log("App rendered:", Date.now());
   return (
     <BrowserRouter>
      <Navbar />
