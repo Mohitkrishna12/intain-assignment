@@ -1164,6 +1164,25 @@ useEffect(() => {
   getUserListCallback();
 }, [getUserListCallback]);
 
+  const getStatusColor = (statusValue) => {
+    console.log(statusValue)
+    const colors = [
+      "#ff0000",
+      "#ff3300",
+      "#ff6600",
+      "#ff9900",
+      "#ffcc00",
+      "#ffff00",
+      "#ccff00",
+      "#99ff00",
+      "#66ff00",
+      "#33ff00",
+    ];
+
+    const colorIndex = Math.floor((statusValue / 100) * 10); // Determine the color index based on the array value
+    return colors[colorIndex];
+  };
+
   const columns = [
     {
       header: "Camera ID",
@@ -1183,7 +1202,24 @@ useEffect(() => {
     },
     {
       header: "Status",
-      //accessorKey: "attendance",
+      accessorKey: "status",
+      cell: ( {cell} ) => {
+        return (
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {cell?.getValue()?.map((statusValue, index) => (
+              <div
+                key={index}
+                style={{
+                  backgroundColor: getStatusColor(statusValue.y),
+                  width: "10px",
+                  height: "10px",
+                  marginRight: "2px",
+                }}
+              />
+            ))}
+          </div>
+        );
+      },
     },
     {
       header: "Action",
@@ -1198,7 +1234,7 @@ useEffect(() => {
     },
   ];
   
-  console.log("data");
+ // console.log("data");
   return (
     <DashboardContainer>
       <GraphContainer>

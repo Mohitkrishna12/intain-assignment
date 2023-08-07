@@ -130,7 +130,7 @@ const CustomTable = ({ data, columns }) => {
 
   const totalPageCount = Math.ceil(data.length / 5);
   const pages = Array.from({ length: totalPageCount }, (_, i) => i + 1);
-  console.log(pages, totalPageCount);
+  //console.log(pages, totalPageCount);
 
   return (
     <div>
@@ -158,7 +158,6 @@ const CustomTable = ({ data, columns }) => {
           ))}
         </tbody>
       </StyledTable>
-      {console.log(table.getState())}
       <PaginationContainer>
         <PaginationItems>
           <PaginationLink
