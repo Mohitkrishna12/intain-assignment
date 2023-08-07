@@ -11,7 +11,7 @@ const MainContainer = styled.main`
   padding-bottom: 1rem; 
   min-height: calc(100vh - 73px);
   @media screen and (min-width: 640px) {
-    padding: 2rem;
+    padding: 2rem 3rem;
   }
 `;
 

@@ -13,8 +13,8 @@ const StyledNavbar = styled.div`
   justify-content: space-between;
   align-items: center;
   background-color: #fff;
-  padding-left: 1rem; 
-  padding-right: 1rem; 
+  padding-left: 2rem; 
+  padding-right: 3rem; 
   padding-top: 0.25rem; 
   padding-bottom: 0.25rem; 
   border-bottom: 1px solid #e6ebf4;

@@ -1,5 +1,10 @@
 import React from 'react'
 import Chart from "react-apexcharts";
+import { styled } from "styled-components";
+
+const StyledGraph = styled.div`
+  border: 2px solid #e8e9ed;
+`;
 
 const CustomGraph = ({data}) => {
     console.log(data)
@@ -108,6 +113,41 @@ const CustomGraph = ({data}) => {
       dataLabels: {
         enabled: false,
       },
+      yaxis: {
+        labels: {
+          align: "center",
+          style: {
+            fontSize: "12px",
+            fontWeight: 400,
+          },
+        },
+        axisBorder: {
+          show: true,
+          color: "#e8e9ed",
+          offsetX: 0,
+          offsetY: 0,
+        },
+      },
+      grid: {
+        show: false,
+        borderColor: "#90A4AE",
+        xaxis: {
+          lines: {
+            show: false,
+          },
+        },
+        yaxis: {
+          lines: {
+            show: false,
+          },
+        },
+        padding: {
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 30,
+        },
+      },
       plotOptions: {
         heatmap: {
           colorScale: {
@@ -136,11 +176,14 @@ const CustomGraph = ({data}) => {
           },
         },
       },
+      legend: {
+        show: false,
+      },
     };
   return (
-    <div>
+    <StyledGraph>
         <Chart options={options} series={s} type="heatmap" height={"300px"} />
-    </div>
+    </StyledGraph>
   )
 }
 

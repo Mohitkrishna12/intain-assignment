@@ -12,23 +12,16 @@ body{
     }
 }
 
-.prompt::-webkit-scrollbar {
-    width: 5px;
+body::-webkit-scrollbar {
+    width: 3px;
 }
  
-.prompt::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb {
   background-color: #666e75;
   border-radius: 5px;
 }
 
 .logo-img{
-  width: 7rem; /* 112px */
+  width: 7rem; 
   object-fit: contain;
-}
-
-.c{
- padding-left: 1rem; /* 16px */
-padding-right: 1rem; /* 16px */
-padding-top: 0.5rem; /* 8px */
-padding-bottom: 0.5rem; /* 8px */
 }
