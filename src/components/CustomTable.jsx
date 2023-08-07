@@ -4,6 +4,7 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
+  flexRender,
 } from "@tanstack/react-table";
 
 const StyledTable = styled.table`
@@ -150,7 +151,7 @@ const CustomTable = ({ data, columns }) => {
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id}>
-                  {cell.getValue(cell.column.columnDef.id)}
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
             </tr>

@@ -70,7 +70,123 @@ const TableContent = styled.div`
 
 `;
 
+const TableViewButton = styled.button`
+  padding: 10px;
+  margin: 0 4px;
+  cursor: pointer;
+  border: none;
+  background-color: #0052cc;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 14px;
+  
 
+  &:hover {
+    background-color: #596780;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+`;
+
+const TableEditButton = styled.button`
+  padding: 10px;
+  margin: 0 4px;
+  cursor: pointer;
+  border: none;
+  background-color: #ef0065;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 14px;
+ 
+
+  &:hover {
+    background-color: #596780;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+`;
+const TableActionButtons = styled.button`
+  padding: 10px;
+  margin: 0 4px;
+  cursor: pointer;
+  border: none;
+  background-color: #ebecf0;
+  color: #596780;
+  border-radius: 4px;
+  font-size: 14px;
+  position: relative;
+  width:75px;
+
+  &:hover {
+    background-color: #596780;
+    color: #ebecf0;
+    text-decoration: none;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  /* Create the dropdown arrow using a pseudo-element */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #596780;
+  }
+
+  &:hover::after {
+    border-top-color: #f1f1f1;
+  }
+`;
+const DropdownMenu = styled.div`
+  display: ${(props) => (props.showDropdown ? "flex" : "none")};
+  flex-direction: column;
+  background-color: #fff;
+  position: absolute;
+  top: 56px;
+  right: 16px;
+  padding: 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  min-width: 150px;
+  z-index: 1;
+
+  a {
+    color: #333;
+    text-decoration: none;
+    padding: 8px;
+    border-bottom: 1px solid #f1f1f1;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: #f1f1f1;
+    }
+  }
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+`;
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -801,15 +917,22 @@ useEffect(() => {
     },
     {
       header: "Attendance",
-      accessorKey: "attendance",
+      accessorFn: (row) => row.attendance + "%",
     },
-    // {
-    //   header: "Status",
-    //   accessorKey: "attendance",
-    // },
+    {
+      header: "Status",
+      //accessorKey: "attendance",
+    },
     {
       header: "Action",
       //accessorKey: "id",
+      cell: () => (
+        <div>
+          <TableViewButton>View More</TableViewButton>
+          <TableEditButton>Watch Live</TableEditButton>
+          <TableActionButtons>More</TableActionButtons>
+        </div>
+      ),
     },
   ];
   
