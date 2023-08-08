@@ -1,4 +1,4 @@
-import React,{memo, useCallback, useState,useEffect} from "react";
+import React, { memo, useCallback, useState, useEffect } from "react";
 import { styled } from "styled-components";
 import {
   flexRender,
@@ -13,7 +13,6 @@ import { getUserList } from "../store/user-slice";
 import CustomTable from "../components/CustomTable";
 import CustomGraph from "../components/CustomGraph";
 
-
 const DashboardContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -21,13 +20,13 @@ const DashboardContainer = styled.div`
   align-items: center;
 `;
 const GraphContainer = styled.div`
-width: 100%;
-margin-bottom: 16px;
+  width: 100%;
+  margin-bottom: 16px;
 
-@media screen and (max-width: 768px) {
+  @media screen and (max-width: 768px) {
     height: 300px;
   }
-`; 
+`;
 
 // const TableContainer = styled.div`
 //   width: 100%;
@@ -45,7 +44,6 @@ const GraphContent = styled.div`
   }
 `;
 
-
 const StyledH2 = styled.h2`
   color: #5f6366;
 `;
@@ -58,7 +56,6 @@ const TableContainer = styled.div`
 
   @media screen and (max-width: 768px) {
     padding: 8px;
-    
   }
 `;
 
@@ -67,7 +64,6 @@ const TableContent = styled.div`
   @media screen and (max-width: 768px) {
     font-size: 14px;
   }
-
 `;
 
 const TableViewButton = styled.button`
@@ -79,7 +75,6 @@ const TableViewButton = styled.button`
   color: #fff;
   border-radius: 4px;
   font-size: 14px;
-  
 
   &:hover {
     background-color: #596780;
@@ -102,7 +97,6 @@ const TableEditButton = styled.button`
   color: #fff;
   border-radius: 4px;
   font-size: 14px;
- 
 
   &:hover {
     background-color: #596780;
@@ -125,7 +119,7 @@ const TableActionButtons = styled.button`
   border-radius: 4px;
   font-size: 14px;
   position: relative;
-  width:75px;
+  width: 75px;
 
   &:hover {
     background-color: #596780;
@@ -186,6 +180,22 @@ const DropdownMenu = styled.div`
   @media screen and (min-width: 768px) {
     display: none;
   }
+`;
+
+const StyledStatusConainer = styled.div`
+  display: flex;
+  alignitems: center;
+  border: 1px solid #e8e9ed;
+  padding: 5px;
+`;
+
+const StyledStatusBar = styled.div`
+  background-color: ${({ getStatusColor, statusValue }) =>
+    getStatusColor(statusValue?.y)};
+  width: 20px;
+  height: 20px;
+  margin-right: 0px;
+  border: 1px solid #e8e9ed;
 `;
 
 const Dashboard = () => {
@@ -1154,31 +1164,25 @@ const Dashboard = () => {
     },
   ];
 
-  
-const getUserListCallback = useCallback(() => {
-  //dispatch(getUserList());
-}, [dispatch]);
+  const getUserListCallback = useCallback(() => {
+    //dispatch(getUserList());
+  }, [dispatch]);
 
-useEffect(() => {
-  getUserListCallback();
-}, [getUserListCallback]);
+  useEffect(() => {
+    getUserListCallback();
+  }, [getUserListCallback]);
 
   const getStatusColor = (val) => {
-    const colors = [
-      "#FFFFFF",
-      "#C6F1F1",
-      "#63D9D9",
-      "#022121",
-    ];
-     if (val >= 0 && val <= 10) {
-       return colors[0]; 
-     } else if (val >= 11 && val <= 29) {
-       return colors[1]; 
-     } else if (val >= 30 && val <= 79) {
-       return colors[2]; 
-     } else if (val >= 80 && val <= 100) {
-       return colors[3];
-     } 
+    const colors = ["#FFFFFF", "#C6F1F1", "#63D9D9", "#022121"];
+    if (val >= 0 && val <= 10) {
+      return colors[0];
+    } else if (val >= 11 && val <= 29) {
+      return colors[1];
+    } else if (val >= 30 && val <= 79) {
+      return colors[2];
+    } else if (val >= 80 && val <= 100) {
+      return colors[3];
+    }
   };
 
   const columns = [
@@ -1203,34 +1207,22 @@ useEffect(() => {
       accessorKey: "status",
       cell: ({ cell }) => {
         return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              border: "1px solid #e8e9ed",
-              padding: "5px",
-            }}
-          >
+          <StyledStatusConainer>
             {cell?.getValue()?.map((statusValue, index) => (
-              <div
+              <StyledStatusBar
                 key={index}
-                style={{
-                  backgroundColor: getStatusColor(statusValue.y),
-                  width: "20px",
-                  height: "20px",
-                  marginRight: "0px",
-                  border: "1px solid #e8e9ed",
-                }}
+                getStatusColor={getStatusColor}
+                statusValue={statusValue}
               />
             ))}
-          </div>
+          </StyledStatusConainer>
         );
       },
     },
     {
       header: "Action",
       //accessorKey: "id",
-      cell: ({ getValue, row: { index }, column: { id }, table }) =>{
+      cell: ({ getValue, row: { index }, column: { id }, table }) => {
         const initialValue = getValue();
         const [value, setValue] = useState(initialValue);
 
@@ -1242,18 +1234,18 @@ useEffect(() => {
           setValue(initialValue);
         }, [initialValue]);
 
-         return(
-        <div>
-        <TableViewButton onclick={updateTable}>View More</TableViewButton>
-          <TableEditButton>Watch Live</TableEditButton>
-          <TableActionButtons>More</TableActionButtons>
-        </div>
-      )
+        return (
+          <div>
+            <TableViewButton onclick={updateTable}>View More</TableViewButton>
+            <TableEditButton>Watch Live</TableEditButton>
+            <TableActionButtons>More</TableActionButtons>
+          </div>
+        );
       },
-    }
+    },
   ];
-  
- // console.log("data");
+
+  // console.log("data");
   return (
     <DashboardContainer>
       <GraphContainer>
