@@ -1,4 +1,4 @@
-import React,{memo, useCallback} from "react";
+import React,{memo, useCallback, useState,useEffect} from "react";
 import { styled } from "styled-components";
 import {
   flexRender,
@@ -8,7 +8,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserList } from "../store/user-slice";
 import CustomTable from "../components/CustomTable";
@@ -1164,23 +1163,22 @@ useEffect(() => {
   getUserListCallback();
 }, [getUserListCallback]);
 
-  const getStatusColor = (statusValue) => {
-    console.log(statusValue)
+  const getStatusColor = (val) => {
     const colors = [
-      "#ff0000",
-      "#ff3300",
-      "#ff6600",
-      "#ff9900",
-      "#ffcc00",
-      "#ffff00",
-      "#ccff00",
-      "#99ff00",
-      "#66ff00",
-      "#33ff00",
+      "#FFFFFF",
+      "#C6F1F1",
+      "#63D9D9",
+      "#022121",
     ];
-
-    const colorIndex = Math.floor((statusValue / 100) * 10); // Determine the color index based on the array value
-    return colors[colorIndex];
+     if (val >= 0 && val <= 10) {
+       return colors[0]; 
+     } else if (val >= 11 && val <= 29) {
+       return colors[1]; 
+     } else if (val >= 30 && val <= 79) {
+       return colors[2]; 
+     } else if (val >= 80 && val <= 100) {
+       return colors[3];
+     } 
   };
 
   const columns = [
@@ -1203,17 +1201,25 @@ useEffect(() => {
     {
       header: "Status",
       accessorKey: "status",
-      cell: ( {cell} ) => {
+      cell: ({ cell }) => {
         return (
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              border: "1px solid #e8e9ed",
+              padding: "5px",
+            }}
+          >
             {cell?.getValue()?.map((statusValue, index) => (
               <div
                 key={index}
                 style={{
                   backgroundColor: getStatusColor(statusValue.y),
-                  width: "10px",
-                  height: "10px",
-                  marginRight: "2px",
+                  width: "20px",
+                  height: "20px",
+                  marginRight: "0px",
+                  border: "1px solid #e8e9ed",
                 }}
               />
             ))}
@@ -1224,14 +1230,27 @@ useEffect(() => {
     {
       header: "Action",
       //accessorKey: "id",
-      cell: () => (
+      cell: ({ getValue, row: { index }, column: { id }, table }) =>{
+        // const initialValue = getValue();
+        // const [value, setValue] = useState(initialValue);
+
+        // const updateTable = () => {
+        //   table.options.meta?.updateData(index, id, value);
+        // };
+
+        // useEffect(() => {
+        //   setValue(initialValue);
+        // }, [initialValue]);
+
+         return(
         <div>
-          <TableViewButton>View More</TableViewButton>
+          //<TableViewButton onclick={updateTable()}>View More</TableViewButton>
           <TableEditButton>Watch Live</TableEditButton>
           <TableActionButtons>More</TableActionButtons>
         </div>
-      ),
-    },
+      )
+      },
+    }
   ];
   
  // console.log("data");

@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useState,useEffect } from "react";
 import { styled } from "styled-components";
 import {
   getCoreRowModel,
@@ -115,15 +115,56 @@ const Ellipsis = styled.span`
   margin: 0 4px;
 `;
 
+const defaultColumn = {
+  cell: ({ getValue, row: { index }, column: { id }, table }) => {
+    const initialValue = getValue()
+    const [value, setValue] = useState(initialValue)
+
+  
+    const onBlur = () => {
+      table.options.meta?.updateData(index, id, value)
+    }
+
+   
+    useEffect(() => {
+      setValue(initialValue)
+    }, [initialValue])
+
+    return (
+      <input
+        value={value}
+        onChange={e => setValue(e.target.value)}
+        onBlur={onBlur}
+      />
+    )
+  },
+}
+
 const CustomTable = ({ data, columns }) => {
   const table = useReactTable({
     data,
     columns,
+    defaultColumn,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
         pageSize: 5,
+      },
+    },
+     meta: {
+      updateData: (rowIndex, columnId, value) => {
+        setData(old =>
+          old.map((row, index) => {
+            if (index === rowIndex) {
+              return {
+                ...old[rowIndex],
+                [columnId]: value,
+              }
+            }
+            return row
+          })
+        )
       },
     },
   });
