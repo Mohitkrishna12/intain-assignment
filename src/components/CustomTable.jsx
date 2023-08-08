@@ -140,11 +140,12 @@ const defaultColumn = {
   },
 }
 
-const CustomTable = ({ data, columns }) => {
+const CustomTable = ({ datas, columns }) => {
+  const [data,setData] = useState(datas);
   const table = useReactTable({
     data,
     columns,
-    defaultColumn,
+    
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {

@@ -1231,20 +1231,20 @@ useEffect(() => {
       header: "Action",
       //accessorKey: "id",
       cell: ({ getValue, row: { index }, column: { id }, table }) =>{
-        // const initialValue = getValue();
-        // const [value, setValue] = useState(initialValue);
+        const initialValue = getValue();
+        const [value, setValue] = useState(initialValue);
 
-        // const updateTable = () => {
-        //   table.options.meta?.updateData(index, id, value);
-        // };
+        const updateTable = () => {
+          table.options.meta?.updateData(index, id, value);
+        };
 
-        // useEffect(() => {
-        //   setValue(initialValue);
-        // }, [initialValue]);
+        useEffect(() => {
+          setValue(initialValue);
+        }, [initialValue]);
 
          return(
         <div>
-          //<TableViewButton onclick={updateTable()}>View More</TableViewButton>
+        <TableViewButton onclick={updateTable}>View More</TableViewButton>
           <TableEditButton>Watch Live</TableEditButton>
           <TableActionButtons>More</TableActionButtons>
         </div>
@@ -1265,7 +1265,7 @@ useEffect(() => {
       <TableContainer>
         <TableContent>
           <h2>User List</h2>
-          <CustomTable data={data} columns={columns} />
+          <CustomTable datas={data} columns={columns} />
         </TableContent>
       </TableContainer>
     </DashboardContainer>
