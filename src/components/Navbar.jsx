@@ -77,7 +77,7 @@ const DropdownMenu = styled.div`
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   min-width: 150px;
-  z-index: 1;
+  z-index: 100;
 
   a {
     color: #333;

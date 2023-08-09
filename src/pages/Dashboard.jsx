@@ -15,19 +15,7 @@ const DashboardContainer = styled.div`
 const GraphContainer = styled.div`
   width: 100%;
   margin-bottom: 16px;
-
-  @media screen and (max-width: 768px) {
-    height: 300px;
-  }
 `;
-
-// const TableContainer = styled.div`
-//   width: 100%;
-//   margin-bottom: 16px;
-//   @media screen and (max-width: 768px) {
-//     height: 300px;
-//   }
-// `;
 
 const GraphContent = styled.div`
   padding: 8px 0px;
@@ -43,6 +31,7 @@ const TableContainer = styled.div`
   padding: 16px;
   margin-bottom: 16px;
   overflow: hidden;
+  overflow-x: auto;
 
   @media screen and (max-width: 768px) {
     padding: 8px;
@@ -53,12 +42,13 @@ const TableContent = styled.div`
   padding: 8px 0px;
   @media screen and (max-width: 768px) {
     font-size: 14px;
+    width:100%
   }
 `;
 
 const TableViewButton = styled.button`
   padding: 10px;
-  margin: 0 4px;
+  margin: 5px 4px;
   cursor: pointer;
   border: none;
   background-color: #0052cc;
@@ -80,7 +70,7 @@ const TableViewButton = styled.button`
 
 const TableEditButton = styled.button`
   padding: 10px;
-  margin: 0 4px;
+  margin: 5px 4px;
   cursor: pointer;
   border: none;
   background-color: #ef0065;
@@ -101,7 +91,7 @@ const TableEditButton = styled.button`
 `;
 const TableActionButtons = styled.button`
   padding: 10px;
-  margin: 0 4px;
+  margin: 5px 4px;
   cursor: pointer;
   border: none;
   background-color: #ebecf0;
@@ -165,9 +155,7 @@ const DropdownMenu = styled.div`
       background-color: #f1f1f1;
     }
   }
-  @media screen and (max-width: 768px) {
-    display: none;
-  }
+
 `;
 
 const DropdownOption = styled.button`
@@ -214,7 +202,7 @@ const EditButton =({
 }) =>{
   const ref = useRef()
   useEffect(() => {
-    if (typeof indeterminate === 'boolean') {
+    if (indeterminate === 'boolean') {
       ref.current.indeterminate = !rest.checked && indeterminate
     }
   }, [ref, indeterminate])

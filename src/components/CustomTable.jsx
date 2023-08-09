@@ -34,10 +34,6 @@ const PaginationContainer = styled.div`
   align-items: center;
   margin-top: 16px;
 
-  @media screen and (max-width: 768px) {
-    display: none;
-  }
-
   span {
     margin: 0 4px;
     font-size: 14px;
@@ -71,9 +67,6 @@ const PaginationItems = styled.div`
   display: flex;
   align-items: center;
 
-  @media screen and (max-width: 768px) {
-    display: none;
-  }
 `;
 
 const PaginationButton = styled.button`
