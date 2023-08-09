@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserList } from "../store/user-slice";
 import CustomTable from "../components/CustomTable";
 import CustomGraph from "../components/CustomGraph";
+import CustomTitle from "../components/CustomTitle";
 
 const DashboardContainer = styled.div`
   display: flex;
@@ -36,9 +37,6 @@ const GraphContent = styled.div`
   }
 `;
 
-const StyledH2 = styled.h2`
-  color: #5f6366;
-`;
 
 const TableContainer = styled.div`
   width: 100%;
@@ -370,13 +368,13 @@ const [rowSelection, setRowSelection] = React.useState({});
     <DashboardContainer>
       <GraphContainer>
         <GraphContent>
-          <h2>Camera Analysis</h2>
+          <CustomTitle title="Camera Analysis" />
           <CustomGraph data={data} />
         </GraphContent>
       </GraphContainer>
       <TableContainer>
         <TableContent>
-          <h2>User List</h2>
+          <CustomTitle title="User List" />
           <CustomTable
             data={data}
             setData={setData}
