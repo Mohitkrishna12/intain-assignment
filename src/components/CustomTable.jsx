@@ -117,13 +117,13 @@ const Ellipsis = styled.span`
 
 
 const CustomTable = ({
-  datas,
+  data,
   columns,
   defaultColumn,
   setRowSelection,
   rowSelection,
+  setData
 }) => {
-  const [data, setData] = useState(datas);
   const table = useReactTable({
     data,
     columns,
@@ -154,6 +154,10 @@ const CustomTable = ({
           })
         );
       },
+      deleteData:(rowId)=>{
+        const updatedData = data.filter((row) => row.camera_id !== rowId);
+        setData(updatedData);
+      }
     },
   });
 
