@@ -15,10 +15,9 @@ const StyledTable = styled.table`
 
     th,
     td {
-      padding: 8px;
+      padding: 10px;
       text-align: center;
       border: 2px solid #e8e9ed;
-      padding: 15px;
     }
 
     th {
@@ -115,64 +114,51 @@ const Ellipsis = styled.span`
   margin: 0 4px;
 `;
 
-const defaultColumn = {
-  cell: ({ getValue, row: { index }, column: { id }, table }) => {
-    const initialValue = getValue()
-    const [value, setValue] = useState(initialValue)
 
-  
-    const onBlur = () => {
-      table.options.meta?.updateData(index, id, value)
-    }
 
-   
-    useEffect(() => {
-      setValue(initialValue)
-    }, [initialValue])
-
-    return (
-      <input
-        value={value}
-        onChange={e => setValue(e.target.value)}
-        onBlur={onBlur}
-      />
-    )
-  },
-}
-
-const CustomTable = ({ datas, columns }) => {
-  const [data,setData] = useState(datas);
+const CustomTable = ({
+  datas,
+  columns,
+  defaultColumn,
+  setRowSelection,
+  rowSelection,
+}) => {
+  const [data, setData] = useState(datas);
   const table = useReactTable({
     data,
     columns,
-    
+    defaultColumn,
+    onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    enableRowSelection: true,
     initialState: {
       pagination: {
         pageSize: 5,
       },
     },
-     meta: {
+    state: {
+      rowSelection,
+    },
+    meta: {
       updateData: (rowIndex, columnId, value) => {
-        setData(old =>
+        setData((old) =>
           old.map((row, index) => {
             if (index === rowIndex) {
               return {
                 ...old[rowIndex],
                 [columnId]: value,
-              }
+              };
             }
-            return row
+            return row;
           })
-        )
+        );
       },
     },
   });
 
   const totalPageCount = Math.ceil(data.length / 5);
   const pages = Array.from({ length: totalPageCount }, (_, i) => i + 1);
-  //console.log(pages, totalPageCount);
 
   return (
     <div>
@@ -181,9 +167,7 @@ const CustomTable = ({ datas, columns }) => {
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th key={header.id}>
-                  {header.column.columnDef.header}
-                </th>
+                <th key={header.id}>{header.column.columnDef.header}</th>
               ))}
             </tr>
           ))}

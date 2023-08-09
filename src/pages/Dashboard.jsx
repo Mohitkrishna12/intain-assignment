@@ -198,6 +198,53 @@ const StyledStatusBar = styled.div`
   border: 1px solid #e8e9ed;
 `;
 
+const StyledInput = styled.input`
+  border:2px solid #d9d9d9;
+  width:150px;
+  padding:10px;
+  font-size:inherit;
+`;
+
+function IndeterminateCheckbox({
+  indeterminate,
+  className = '',
+  ...rest
+}) {
+  const ref = React.useRef()
+
+  React.useEffect(() => {
+    if (typeof indeterminate === 'boolean') {
+      ref.current.indeterminate = !rest.checked && indeterminate
+    }
+  }, [ref, indeterminate])
+
+  return (
+    <input
+      type="checkbox"
+      ref={ref}
+      className={className + ' cursor-pointer'}
+      {...rest}
+    />
+  )
+}
+
+const defaultColumn = {
+  cell: ({ getValue, row, column: { id }, table }) => {
+    const initialValue = getValue();
+    const [value, setValue] = useState(initialValue);
+    console.log(row.getIsSelected());
+    useEffect(() => {
+      setValue(initialValue);
+    }, [initialValue]);
+
+    return row.getIsSelected() ? (
+      <StyledInput value={value} onChange={(e) => setValue(e.target.value)} />
+    ) : (
+      value
+    );
+  },
+};
+
 const Dashboard = () => {
   const dispatch = useDispatch();
   //const data = useSelector((state) => state.user.userList);
@@ -1184,11 +1231,12 @@ const Dashboard = () => {
       return colors[3];
     }
   };
-
+const [rowSelection, setRowSelection] = React.useState({});
   const columns = [
     {
       header: "Camera ID",
       accessorKey: "camera_id",
+      cell: (info) => info.getValue(),
     },
     {
       header: "Officer Name",
@@ -1201,6 +1249,7 @@ const Dashboard = () => {
     {
       header: "Attendance",
       accessorFn: (row) => row.attendance + "%",
+      cell: (info) => info.getValue(),
     },
     {
       header: "Status",
@@ -1222,21 +1271,20 @@ const Dashboard = () => {
     {
       header: "Action",
       //accessorKey: "id",
-      cell: ({ getValue, row: { index }, column: { id }, table }) => {
-        const initialValue = getValue();
-        const [value, setValue] = useState(initialValue);
-
-        const updateTable = () => {
-          table.options.meta?.updateData(index, id, value);
-        };
-
-        useEffect(() => {
-          setValue(initialValue);
-        }, [initialValue]);
-
+      cell: ({ row }) => {
         return (
           <div>
-            <TableViewButton onclick={updateTable}>View More</TableViewButton>
+            <IndeterminateCheckbox
+              {...{
+                checked: row.getIsSelected(),
+                disabled: !row.getCanSelect(),
+                indeterminate: row.getIsSomeSelected(),
+                onChange: row.getToggleSelectedHandler(),
+              }}
+            />
+            <TableViewButton onclick={row.getToggleSelectedHandler()}>
+              View More
+            </TableViewButton>
             <TableEditButton>Watch Live</TableEditButton>
             <TableActionButtons>More</TableActionButtons>
           </div>
@@ -1245,7 +1293,7 @@ const Dashboard = () => {
     },
   ];
 
-  // console.log("data");
+   console.log(rowSelection,"<<");
   return (
     <DashboardContainer>
       <GraphContainer>
@@ -1257,7 +1305,13 @@ const Dashboard = () => {
       <TableContainer>
         <TableContent>
           <h2>User List</h2>
-          <CustomTable datas={data} columns={columns} />
+          <CustomTable
+            datas={data}
+            columns={columns}
+            defaultColumn={defaultColumn}
+            setRowSelection={setRowSelection}
+            rowSelection={rowSelection}
+          />
         </TableContent>
       </TableContainer>
     </DashboardContainer>
