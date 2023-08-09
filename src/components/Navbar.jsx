@@ -39,7 +39,7 @@ const NavItems = styled.div`
 const NavItem = styled(Link)`
   display: flex;
   align-items: center;
-  text-decoration: none; 
+  text-decoration: none;
   &:first-child {
     margin-left: 0;
   }
@@ -48,6 +48,9 @@ const NavItem = styled(Link)`
   color: #5f6366;
   font-weight: bold;
 
+  &:hover {
+    color: #009999;
+  }
   svg {
     width: 20px;
     height: 20px;
