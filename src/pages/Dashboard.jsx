@@ -1,13 +1,5 @@
-import React, { memo, useCallback, useState, useEffect } from "react";
+import React, { memo, useCallback, useState, useEffect, useRef } from "react";
 import { styled } from "styled-components";
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserList } from "../store/user-slice";
 import CustomTable from "../components/CustomTable";
@@ -132,7 +124,6 @@ const TableActionButtons = styled.button`
     cursor: not-allowed;
   }
 
-  /* Create the dropdown arrow using a pseudo-element */
   &::after {
     content: "";
     position: absolute;
@@ -155,7 +146,6 @@ const DropdownMenu = styled.div`
   flex-direction: column;
   background-color: #fff;
   position: absolute;
-  top: 56px;
   right: 16px;
   padding: 8px;
   border-radius: 4px;
@@ -177,8 +167,21 @@ const DropdownMenu = styled.div`
       background-color: #f1f1f1;
     }
   }
-  @media screen and (min-width: 768px) {
+  @media screen and (max-width: 768px) {
     display: none;
+  }
+`;
+
+const DropdownOption = styled.button`
+  background-color: #f9f9f9;
+  border: none;
+  width: 100%;
+  padding: 8px 10px;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ddd;
   }
 `;
 
@@ -205,40 +208,39 @@ const StyledInput = styled.input`
   font-size:inherit;
 `;
 
-function IndeterminateCheckbox({
+const EditButton =({
   indeterminate,
-  className = '',
   ...rest
-}) {
-  const ref = React.useRef()
+}) =>{
+  const ref = useRef()
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (typeof indeterminate === 'boolean') {
       ref.current.indeterminate = !rest.checked && indeterminate
     }
   }, [ref, indeterminate])
 
   return (
-    <input
-      type="checkbox"
+    <DropdownOption
       ref={ref}
-      className={className + ' cursor-pointer'}
       {...rest}
-    />
-  )
+    >Edit</DropdownOption>
+  );
 }
 
 const defaultColumn = {
   cell: ({ getValue, row, column: { id }, table }) => {
     const initialValue = getValue();
     const [value, setValue] = useState(initialValue);
-    console.log(row.getIsSelected());
+    const onBlur = () => {
+        table.options.meta?.updateData(row.index, id, value);
+      };
     useEffect(() => {
       setValue(initialValue);
     }, [initialValue]);
 
     return row.getIsSelected() ? (
-      <StyledInput value={value} onChange={(e) => setValue(e.target.value)} />
+      <StyledInput value={value} onChange={(e) => setValue(e.target.value)} onBlur={onBlur} />
     ) : (
       value
     );
@@ -247,6 +249,15 @@ const defaultColumn = {
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+   const [openDropdownRow, setOpenDropdownRow] = useState(null);
+
+   const toggleDropdown = (rowId) => {
+     if (rowId === openDropdownRow) {
+       setOpenDropdownRow(null);
+     } else {
+       setOpenDropdownRow(rowId);
+     }
+   };
   //const data = useSelector((state) => state.user.userList);
   const data = [
     {
@@ -1270,30 +1281,34 @@ const [rowSelection, setRowSelection] = React.useState({});
     },
     {
       header: "Action",
-      //accessorKey: "id",
       cell: ({ row }) => {
+        const isDropdownOpen = row.id === openDropdownRow;
         return (
           <div>
-            <IndeterminateCheckbox
-              {...{
-                checked: row.getIsSelected(),
-                disabled: !row.getCanSelect(),
-                indeterminate: row.getIsSomeSelected(),
-                onChange: row.getToggleSelectedHandler(),
-              }}
-            />
             <TableViewButton onclick={row.getToggleSelectedHandler()}>
               View More
             </TableViewButton>
             <TableEditButton>Watch Live</TableEditButton>
-            <TableActionButtons>More</TableActionButtons>
+            <TableActionButtons onClick={() => toggleDropdown(row.id)}>
+              More
+            </TableActionButtons>
+            <DropdownMenu showDropdown={isDropdownOpen}>
+              <EditButton
+                {...{
+                  disabled: !row.getCanSelect(),
+                  indeterminate: row.getIsSomeSelected(),
+                  onClick: row.getToggleSelectedHandler(),
+                }}
+              />
+              <DropdownOption>Delete</DropdownOption>
+              <DropdownOption>Refresh Data</DropdownOption>
+            </DropdownMenu>
           </div>
         );
       },
     },
   ];
 
-   console.log(rowSelection,"<<");
   return (
     <DashboardContainer>
       <GraphContainer>
