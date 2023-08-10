@@ -15,7 +15,4 @@ body::-webkit-scrollbar-thumb {
   border-radius: 5px;
 }
 
-.logo-img{
-  width: 7rem; 
-  object-fit: contain;
-}
+

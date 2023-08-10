@@ -98,6 +98,11 @@ const DropdownMenu = styled.div`
   }
 `;
 
+const LogoImg = styled.img`
+  width: 7rem;
+  object-fit: contain;
+`;
+
 export const Navbar = () => {
      const [showDropdown, setShowDropdown] = useState(false);
 
@@ -107,7 +112,7 @@ export const Navbar = () => {
   return (
       <StyledNavbar>
         <Link to="/">
-          <img src={logo} alt="logo" className="logo-img" />
+          <LogoImg src={logo} alt="logo" />
         </Link>
         <NavItems>
           <NavItem to="/">
