@@ -67,7 +67,7 @@ const HamburgerMenu = styled.div`
 `;
 
 const DropdownMenu = styled.div`
-  display: ${(props) => (props.showDropdown ? "flex" : "none")};
+  display: ${(props) => (props.$showDropdown ? "flex" : "none")};
   flex-direction: column;
   background-color: #fff;
   position: absolute;
@@ -135,7 +135,7 @@ export const Navbar = () => {
           <GiHamburgerMenu />
         </HamburgerMenu>
         {showDropdown && (
-          <DropdownMenu showDropdown={showDropdown}>
+          <DropdownMenu $showDropdown={showDropdown}>
             <Link to="/">Home</Link>
             <Link>List</Link>
             <Link>Escalation</Link>

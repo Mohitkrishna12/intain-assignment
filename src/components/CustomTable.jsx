@@ -88,18 +88,18 @@ const PaginationButton = styled.button`
 const PaginationLink = styled.a`
   padding: 8px;
   margin: 0 4px;
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  cursor: ${(props) => (props?.$disabled ? "not-allowed" : "pointer")};
   border: none;
-  background-color: ${({ active }) => (active ? "#273A56" : "transparent")};
-  color: ${({ active }) => (active ? "#fff" : "#ccc")};
+  background-color: ${(props) => (props?.$active ? "#273A56" : "transparent")};
+  color: ${(props) => (props?.$active ? "#fff" : "#ccc")};
   border-radius: 4px;
   font-size: 14px;
   text-decoration: none;
 
   &:hover {
-    background-color: ${({ active, disabled }) =>
-      active ? "#f0f0f0" : disabled ? "#fff" : "#273A56"};
-    color: ${({ active }) => (active ? "#273a56" : "#ccc")};
+    background-color: ${(props) =>
+      props?.$active ? "#f0f0f0" : props?.$disabled ? "#fff" : "#273A56"};
+    color: ${(props) => (props?.$active ? "#273a56" : "#ccc")};
   }
 `;
 
@@ -199,7 +199,7 @@ const CustomTable = ({
                 page <= table?.getState()?.pagination?.pageIndex + 4 && (
                   <PaginationLink
                     key={index}
-                    active={
+                    $active={
                       table?.getState()?.pagination?.pageIndex + 1 === page
                     }
                     onClick={() => table?.setPageIndex(index)}
@@ -213,7 +213,7 @@ const CustomTable = ({
             </>
           ))}
           <PaginationLink
-            active={
+            $active={
               table?.getState()?.pagination?.pageIndex + 1 === totalPageCount
             }
             onClick={() => table?.setPageIndex(totalPageCount - 1)}

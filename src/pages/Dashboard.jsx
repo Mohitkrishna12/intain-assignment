@@ -1,10 +1,11 @@
-import React, { memo, useCallback, useState, useEffect, useRef } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { styled } from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserList } from "../store/user-slice";
 import CustomTable from "../components/CustomTable";
 import CustomGraph from "../components/CustomGraph";
 import CustomTitle from "../components/CustomTitle";
+import CustomErrorCard from "../components/CustomErrorCard";
 
 const DashboardContainer = styled.div`
   display: flex;
@@ -25,7 +26,6 @@ const GraphContent = styled.div`
   }
 `;
 
-
 const TableContainer = styled.div`
   width: 100%;
   padding: 16px;
@@ -42,7 +42,7 @@ const TableContent = styled.div`
   padding: 8px 0px;
   @media screen and (max-width: 768px) {
     font-size: 14px;
-    width:100%
+    width: 100%;
   }
 `;
 
@@ -51,7 +51,7 @@ const TableButton = styled.button`
   margin: 5px 4px;
   cursor: pointer;
   border: none;
-  background-color: ${({ view }) => (view ? "#0052cc" : " #ef0065")};
+  background-color: ${(props) => (props?.$view ? "#0052cc" : " #ef0065")};
   color: #fff;
   border-radius: 4px;
   font-size: 14px;
@@ -109,7 +109,7 @@ const TableActionButtons = styled.button`
   }
 `;
 const DropdownMenu = styled.div`
-  display: ${(props) => (props.showDropdown ? "flex" : "none")};
+  display: ${(props) => (props?.$showDropdown ? "flex" : "none")};
   flex-direction: column;
   background-color: #fff;
   position: absolute;
@@ -134,7 +134,6 @@ const DropdownMenu = styled.div`
       background-color: #f1f1f1;
     }
   }
-
 `;
 
 const DropdownOption = styled.button`
@@ -153,14 +152,13 @@ const DropdownOption = styled.button`
 const StyledStatusConainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content:space-between;
+  justify-content: space-between;
   border: 1px solid #e8e9ed;
   padding: 5px;
 `;
 
 const StyledStatusBar = styled.div`
-  background-color: ${({ getStatusColor, statusValue }) =>
-    getStatusColor(statusValue?.y)};
+  background-color: ${(props) => props?.$bgColor};
   width: 20px;
   height: 20px;
   margin-right: 0px;
@@ -168,45 +166,44 @@ const StyledStatusBar = styled.div`
 `;
 
 const StyledInput = styled.input`
-  border:2px solid #d9d9d9;
-  width:150px;
-  padding:10px;
-  font-size:inherit;
+  border: 2px solid #d9d9d9;
+  width: 150px;
+  padding: 10px;
+  font-size: inherit;
 `;
 
-const EditButton =({
-  indeterminate,
-  selected,
-  ...rest
-}) =>{
-  const ref = useRef()
+const EditButton = ({ indeterminate, selected, ...rest }) => {
+  const ref = useRef();
   useEffect(() => {
-    if (indeterminate === 'boolean') {
-      ref.current.indeterminate = !rest.checked && indeterminate
+    if (indeterminate === "boolean") {
+      ref.current.indeterminate = !rest.checked && indeterminate;
     }
-  }, [ref, indeterminate])
+  }, [ref, indeterminate]);
 
   return (
-    <DropdownOption
-      ref={ref}
-      {...rest}
-    >{selected?"Save":"Edit"}</DropdownOption>
+    <DropdownOption ref={ref} {...rest}>
+      {selected ? "Save" : "Edit"}
+    </DropdownOption>
   );
-}
+};
 
 const defaultColumn = {
   cell: ({ getValue, row, column: { id }, table }) => {
     const initialValue = getValue();
     const [value, setValue] = useState(initialValue);
     const onBlur = () => {
-        table.options.meta?.updateData(row.index, id, value);
-      };
+      table.options.meta?.updateData(row.index, id, value);
+    };
     useEffect(() => {
       setValue(initialValue);
     }, [initialValue]);
 
     return row.getIsSelected() ? (
-      <StyledInput value={value} onChange={(e) => setValue(e.target.value)} onBlur={onBlur} />
+      <StyledInput
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onBlur={onBlur}
+      />
     ) : (
       value
     );
@@ -217,21 +214,30 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const [openDropdownRow, setOpenDropdownRow] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(false);
   const userData = useSelector((state) => state.user.userList);
+  const userDataError = useSelector((state) => state.user.userListError);
+  const [rowSelection, setRowSelection] = React.useState({});
   const getUserListCallback = useCallback(() => {
     dispatch(getUserList());
   }, [dispatch]);
-  
+
   useEffect(() => {
     getUserListCallback();
   }, [getUserListCallback]);
 
-  useEffect(()=>{
-    if(userData.length>0){
-      setData(userData)
+  useEffect(() => {
+    if (userData.length > 0) {
+      setData(userData);
     }
-  },[userData])
-  
+  }, [userData]);
+
+  useEffect(() => {
+    if (userDataError?.error) {
+      setErrorMessage(true);
+    }
+  }, [userDataError]);
+
   const toggleDropdown = (rowId) => {
     if (rowId === openDropdownRow) {
       setOpenDropdownRow(null);
@@ -251,7 +257,7 @@ const Dashboard = () => {
       return colors[3];
     }
   };
-const [rowSelection, setRowSelection] = React.useState({});
+
   const columns = [
     {
       header: "Camera ID",
@@ -277,37 +283,35 @@ const [rowSelection, setRowSelection] = React.useState({});
       cell: ({ cell }) => {
         return (
           <StyledStatusConainer>
-            {cell?.getValue()?.map((statusValue, index) => (
-              <StyledStatusBar
-                key={index}
-                getStatusColor={getStatusColor}
-                statusValue={statusValue}
-              />
-            ))}
+            {cell?.getValue()?.map((statusValue, index) => {
+              const bgColor = getStatusColor(statusValue?.y);
+              console.log(bgColor);
+              return <StyledStatusBar key={statusValue.x} $bgColor={bgColor} />;
+            })}
           </StyledStatusConainer>
         );
       },
     },
     {
       header: "Action",
-      cell: ({ row,table }) => {
+      cell: ({ row, table }) => {
         const isDropdownOpen = row.id === openDropdownRow;
-        const handleDelete =(rowId)=>{
+        const handleDelete = (rowId) => {
           table.options.meta?.deleteData(rowId);
-          setOpenDropdownRow(null); 
-        }
-        const handleRefresh=()=>{
-          setOpenDropdownRow(null); 
+          setOpenDropdownRow(null);
+        };
+        const handleRefresh = () => {
+          setOpenDropdownRow(null);
           dispatch(getUserList());
-        }
+        };
         return (
           <div>
-            <TableButton view={true}>View More</TableButton>
-            <TableButton view={false}>Watch Live</TableButton>
+            <TableButton $view={true}>View More</TableButton>
+            <TableButton $view={false}>Watch Live</TableButton>
             <TableActionButtons onClick={() => toggleDropdown(row.id)}>
               More
             </TableActionButtons>
-            <DropdownMenu showDropdown={isDropdownOpen}>
+            <DropdownMenu $showDropdown={isDropdownOpen}>
               <EditButton
                 {...{
                   disabled: !row.getCanSelect(),
@@ -330,28 +334,36 @@ const [rowSelection, setRowSelection] = React.useState({});
       },
     },
   ];
-
   return (
     <DashboardContainer>
-      <GraphContainer>
-        <GraphContent>
-          <CustomTitle title="Camera Analysis" />
-          <CustomGraph data={data} />
-        </GraphContent>
-      </GraphContainer>
-      <TableContainer>
-        <TableContent>
-          <CustomTitle title="User List" />
-          <CustomTable
-            data={data}
-            setData={setData}
-            columns={columns}
-            defaultColumn={defaultColumn}
-            setRowSelection={setRowSelection}
-            rowSelection={rowSelection}
-          />
-        </TableContent>
-      </TableContainer>
+      {errorMessage ? (
+        <CustomErrorCard
+          title={userDataError?.error?.name}
+          message={userDataError?.error?.message}
+        />
+      ) : (
+        <>
+          <GraphContainer>
+            <GraphContent>
+              <CustomTitle title="Camera Analysis" />
+              <CustomGraph data={data} />
+            </GraphContent>
+          </GraphContainer>
+          <TableContainer>
+            <TableContent>
+              <CustomTitle title="User List" />
+              <CustomTable
+                data={data}
+                setData={setData}
+                columns={columns}
+                defaultColumn={defaultColumn}
+                setRowSelection={setRowSelection}
+                rowSelection={rowSelection}
+              />
+            </TableContent>
+          </TableContainer>
+        </>
+      )}
     </DashboardContainer>
   );
 };

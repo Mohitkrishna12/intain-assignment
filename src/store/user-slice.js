@@ -14,8 +14,17 @@ const MOCK_URL = "https://my.api.mockaroo.com/users.json?key=b5601520";
 export const getUserList = createAsyncThunk(
   "GET_USERS_LIST",
   async () => {
-    const response = await axios.get(MOCK_URL);
-    return response.data;
+    try {
+      const response = await axios.get(MOCK_URL);
+      return response.data;   
+    } catch (error) {
+      if (error?.response && error?.response?.status === 500) {
+        const errorMessage = error?.response?.data?.error; 
+        throw new Error(errorMessage);
+      } else {
+        throw error;
+      }
+    }
   }
 );
 
