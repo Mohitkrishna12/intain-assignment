@@ -16,7 +16,6 @@ const MainContainer = styled.main`
 `;
 
 const App = () => {
-  console.log("App rendered:", Date.now());
   return (
     <BrowserRouter>
      <Navbar />

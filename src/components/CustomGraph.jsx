@@ -7,7 +7,7 @@ const StyledGraph = styled.div`
 `;
 
 const CustomGraph = ({data}) => {
-    const series = data.map((e) =>({name:e.officer_name,data:e.status}));
+    const series = data?.map((e) =>({name:e?.officer_name,data:e?.status}));
     const options = {
       chart: {
         type: "heatmap",
