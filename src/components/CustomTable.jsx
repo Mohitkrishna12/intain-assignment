@@ -148,33 +148,33 @@ const CustomTable = ({
         );
       },
       deleteData:(rowId)=>{
-        const updatedData = data.filter((row) => row.camera_id !== rowId);
+        const updatedData = data?.filter((row) => row?.camera_id !== rowId);
         setData(updatedData);
       }
     },
   });
 
-  const totalPageCount = Math.ceil(data.length / 5);
+  const totalPageCount = Math.ceil(data?.length / 5);
   const pages = Array.from({ length: totalPageCount }, (_, i) => i + 1);
 
   return (
     <div>
       <StyledTable>
         <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id}>{header.column.columnDef.header}</th>
+          {table?.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup?.id}>
+              {headerGroup?.headers?.map((header) => (
+                <th key={header?.id}>{header?.column?.columnDef?.header}</th>
               ))}
             </tr>
           ))}
         </thead>
         <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+          {table?.getRowModel()?.rows?.map((row) => (
+            <tr key={row?.id}>
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                <td key={cell?.id}>
+                  {flexRender(cell?.column?.columnDef?.cell, cell?.getContext())}
                 </td>
               ))}
             </tr>
@@ -185,60 +185,60 @@ const CustomTable = ({
         <PaginationItems>
           <PaginationLink
             disabled={table?.getState()?.pagination?.pageIndex === 0}
-            onClick={() => table.setPageIndex(0)}
+            onClick={() => table?.setPageIndex(0)}
           >
             &lt;&lt;
           </PaginationLink>
-          {pages.map((page, index) => (
+          {pages?.map((page, index) => (
             <>
-              {index === 1 && table.getState()?.pagination?.pageIndex > 2 && (
+              {index === 1 && table?.getState()?.pagination?.pageIndex > 2 && (
                 <Ellipsis>...</Ellipsis>
               )}
-              {table.getState()?.pagination?.pageIndex <= index &&
+              {table?.getState()?.pagination?.pageIndex <= index &&
                 page !== totalPageCount &&
-                page <= table.getState()?.pagination?.pageIndex + 4 && (
+                page <= table?.getState()?.pagination?.pageIndex + 4 && (
                   <PaginationLink
                     key={index}
                     active={
-                      table.getState()?.pagination?.pageIndex + 1 === page
+                      table?.getState()?.pagination?.pageIndex + 1 === page
                     }
-                    onClick={() => table.setPageIndex(index)}
+                    onClick={() => table?.setPageIndex(index)}
                   >
                     {page}
                   </PaginationLink>
                 )}
               {index === totalPageCount - 2 &&
-                table.getState()?.pagination?.pageIndex <=
+                table?.getState()?.pagination?.pageIndex <=
                   totalPageCount - 3 && <Ellipsis>...</Ellipsis>}
             </>
           ))}
           <PaginationLink
             active={
-              table.getState()?.pagination?.pageIndex + 1 === totalPageCount
+              table?.getState()?.pagination?.pageIndex + 1 === totalPageCount
             }
-            onClick={() => table.setPageIndex(totalPageCount - 1)}
+            onClick={() => table?.setPageIndex(totalPageCount - 1)}
           >
             {totalPageCount}
           </PaginationLink>
           <PaginationLink
             disabled={
-              table.getState()?.pagination?.pageIndex === totalPageCount - 1
+              table?.getState()?.pagination?.pageIndex === totalPageCount - 1
             }
-            onClick={() => table.setPageIndex(totalPageCount - 1)}
+            onClick={() => table?.setPageIndex(totalPageCount - 1)}
           >
             &gt;&gt;
           </PaginationLink>
         </PaginationItems>
         <PaginationItems>
           <PaginationButton
-            disabled={!table.getCanPreviousPage()}
-            onClick={() => table.previousPage()}
+            disabled={!table?.getCanPreviousPage()}
+            onClick={() => table?.previousPage()}
           >
             Prev Page
           </PaginationButton>
           <PaginationButton
-            disabled={!table.getCanNextPage()}
-            onClick={() => table.nextPage()}
+            disabled={!table?.getCanNextPage()}
+            onClick={() => table?.nextPage()}
           >
             Next Page
           </PaginationButton>

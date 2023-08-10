@@ -46,12 +46,12 @@ const TableContent = styled.div`
   }
 `;
 
-const TableViewButton = styled.button`
+const TableButton = styled.button`
   padding: 10px;
   margin: 5px 4px;
   cursor: pointer;
   border: none;
-  background-color: #0052cc;
+  background-color: ${({ view }) => (view ? "#0052cc" : " #ef0065")};
   color: #fff;
   border-radius: 4px;
   font-size: 14px;
@@ -68,27 +68,6 @@ const TableViewButton = styled.button`
   }
 `;
 
-const TableEditButton = styled.button`
-  padding: 10px;
-  margin: 5px 4px;
-  cursor: pointer;
-  border: none;
-  background-color: #ef0065;
-  color: #fff;
-  border-radius: 4px;
-  font-size: 14px;
-
-  &:hover {
-    background-color: #596780;
-    color: #fff;
-    text-decoration: none;
-  }
-
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-`;
 const TableActionButtons = styled.button`
   padding: 10px;
   margin: 5px 4px;
@@ -323,8 +302,8 @@ const [rowSelection, setRowSelection] = React.useState({});
         }
         return (
           <div>
-            <TableViewButton>View More</TableViewButton>
-            <TableEditButton>Watch Live</TableEditButton>
+            <TableButton view={true}>View More</TableButton>
+            <TableButton view={false}>Watch Live</TableButton>
             <TableActionButtons onClick={() => toggleDropdown(row.id)}>
               More
             </TableActionButtons>
