@@ -285,7 +285,6 @@ const Dashboard = () => {
           <StyledStatusConainer>
             {cell?.getValue()?.map((statusValue, index) => {
               const bgColor = getStatusColor(statusValue?.y);
-              console.log(bgColor);
               return <StyledStatusBar key={statusValue.x} $bgColor={bgColor} />;
             })}
           </StyledStatusConainer>

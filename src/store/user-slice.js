@@ -8,7 +8,7 @@ const initialState = {
   isLoadingUserList: false,
 };
 
-const MOCK_URL = "https://my.api.mockaroo.com/users.json?key=b5601520";
+const MOCK_URL = "https://my.api.mockaroo.com/users.json?key=a77f1650";
 
 
 export const getUserList = createAsyncThunk(
